@@ -43,12 +43,11 @@ clean-git: check-path
 
 # Inject ---------------------------------------------------------------------------------------------------------------
 
-inject-homework1: check-path check-git-clean install
+inject-homework1: check-path check-scheme check-git-clean install
 	#
 	# >> Inject UITests for homewokr1
 	#
-	# bundle exec ruby inject-uitest.rb ${path} hw1-calculator-test/
-	# TODO: Set workspace ... scheme
+	bundle exec ruby lib/inject-uitest.rb ${path} ${scheme} hw1-calculator-test/
 
 
 # Run ------------------------------------------------------------------------------------------------------------------

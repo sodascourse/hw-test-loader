@@ -65,4 +65,24 @@ class CalculatorUITests: XCTestCase {
         app.buttons["="].tap()
         XCTAssertTrue(app.staticTexts["42"].exists)
     }
+
+    func testComplexAddSub() {
+        let app = XCUIApplication()
+
+        app.buttons["6"].tap()
+        app.buttons["0"].tap()
+        app.buttons["+"].tap()
+        app.buttons["1"].tap()
+        app.buttons["1"].tap()
+        app.buttons["-"].tap()
+        app.buttons["2"].tap()
+        app.buttons["9"].tap()
+        app.buttons["+"].tap()
+        app.buttons["4"].tap()
+        app.buttons["2"].tap()
+        app.buttons["0"].tap()
+        app.buttons["0"].tap()
+        app.buttons["="].tap()
+        XCTAssertTrue(app.staticTexts["4242"].exists)
+    }
 }

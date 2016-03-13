@@ -1,25 +1,6 @@
 require 'xcodeproj'
 
 #
-# Returns a target which is either matched to the name or an app
-#
-# - project: Instance of Xcodeproj::Project
-# - target_name_for_testing: specified target name to test, may be nil.
-#
-# returns: Instance of Xcodeproj::Project::Object::PBXNativeTarget.
-#          The target to be test, if the name for testing is nil, then it's the first one
-#
-def get_target_for_testing(project, target_name_for_testing)
-  project.targets.each do |target|
-    if (target.product_type == 'com.apple.product-type.application' &&
-        (target_name_for_testing.nil? || target_name_for_testing == target.name))
-      return target
-    end
-  end
-  return nil
-end
-
-#
 # Create a target for inject test
 #
 # - project: Instance of Xcodeproj::Project
@@ -65,8 +46,8 @@ end
 
 module TestInjecter
   def self.inject_unit_test(project, test_dir,
-                            test_target_name="InjectedTests", test_target_identifier='com.injected.unittest',
-                            target_name_for_testing=nil, attatch_to_target=true)
+                            test_target_name: "InjectedTests", test_target_identifier: 'com.injected.unittest',
+                            target_name_for_testing: nil, attatch_to_target: true)
     test_target = create_inject_test_target project, test_dir, test_target_name, test_target_identifier
     if test_target.nil?
       return nil
@@ -74,7 +55,15 @@ module TestInjecter
 
     test_target.product_type = 'com.apple.product-type.bundle.unit-test'
     if attatch_to_target
-      target_for_testing = get_target_for_testing project, target_name_for_testing
+      if target_name_for_testing.nil?
+        return nil
+      end
+      target_for_testing = nil
+      project.targets.each { |target|
+        if target.name == target_name_for_testing
+          target_for_testing = target
+        end
+      }
       if target_for_testing.nil?
         return nil
       end
@@ -88,8 +77,8 @@ module TestInjecter
   end
 
   def self.inject_ui_test(project, test_dir,
-                          test_target_name="InjectedUITests", test_target_identifier='com.injected.uitest',
-                          target_name_for_testing=nil)
+                          test_target_name: "InjectedUITests", test_target_identifier: 'com.injected.uitest',
+                          target_name_for_testing: nil)
     test_target = create_inject_test_target project, test_dir, test_target_name, test_target_identifier
     if test_target.nil?
       return nil
@@ -97,7 +86,12 @@ module TestInjecter
 
     test_target.product_type = 'com.apple.product-type.bundle.ui-testing'
 
-    target_for_testing = get_target_for_testing project, target_name_for_testing
+    target_for_testing = nil
+    project.targets.each { |target|
+      if target.name == target_name_for_testing
+        target_for_testing = target
+      end
+    }
     if target_for_testing.nil?
         return nil
       end
