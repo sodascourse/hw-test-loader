@@ -1,5 +1,3 @@
-HOMEWORKS=homework1 homework2
-
 err = (printf "\n\033[0;31mERROR: %s\033[0m\n\n" $(1) && exit 1)
 check-var = (test `wc -w <<< $(1)` != "0" || $(call err,"\`$(2)\` is required."))
 
@@ -43,13 +41,13 @@ clean-git: check-path
 
 # Inject ---------------------------------------------------------------------------------------------------------------
 
-inject-command:=bundle exec ruby lib/inject-uitest.rb ${path} ${scheme}
+INJECT-UI:=bundle exec ruby lib/inject-uitest.rb ${path} ${scheme}
 
 inject-homework1: check-path check-scheme check-git-clean install
 	#
 	# >> Inject UITests for homework1
 	#
-	$(inject-command) hw1-calculator-test/
+	$(INJECT-UI) hw1-calculator-test/
 
 
 # Run ------------------------------------------------------------------------------------------------------------------
@@ -59,5 +57,9 @@ run-test: check-scheme check-path install
 	# >> Run Tests
 	#
 	cd ${path} && scan -s ${scheme} --clean -o /dev/null
+
+# Run ------------------------------------------------------------------------------------------------------------------
+
+HOMEWORKS=homework1 homework2
 
 $(HOMEWORKS): % : inject-% run-test clean-git
