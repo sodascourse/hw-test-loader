@@ -9,8 +9,8 @@
 ### Make Commands
 
 Homework # | Command
------------|-------------------------------------------------------------
-Homework 1 | `make homework1 path=[PATH_TO_YOUR_PROJECT] scheme=[SCHEME]
+-----------|--------------------------------------------------------------
+Homework 1 | `make homework1 path=[PATH_TO_YOUR_PROJECT] scheme=[SCHEME]`
 
 For example:
 ```shell
