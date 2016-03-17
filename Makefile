@@ -1,6 +1,13 @@
 err = (printf "\n\033[0;31mERROR: %s\033[0m\n\n" $(1) && exit 1)
 check-var = (test `wc -w <<< $(1)` != "0" || $(call err,"\`$(2)\` is required."))
 
+usage:
+	#
+	# Usage
+	#
+	# make homework1 path=<SOURCE_DIR> scheme=<XCODE_SCHEME>
+	#
+
 check-path:
 	#
 	# >> Make sure path argument has been set
@@ -42,12 +49,13 @@ clean-git: check-path
 # Inject ---------------------------------------------------------------------------------------------------------------
 
 INJECT-UI:=bundle exec ruby lib/inject-uitest.rb ${path} ${scheme}
+TEST_CASE_HW1?=hw1-calculator-test/
 
 inject-homework1: check-path check-scheme check-git-clean install
 	#
 	# >> Inject UITests for homework1
 	#
-	$(INJECT-UI) hw1-calculator-test/
+	$(INJECT-UI) $(TEST_CASE_HW1)
 
 
 # Run ------------------------------------------------------------------------------------------------------------------
